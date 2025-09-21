@@ -17,7 +17,7 @@ def main(targets, value): # функция реализации бинарног
     if low > high:
         return None # число не нашлось
     else:
-        return mid, counter # число нашлось
+        return mid, counter # число нашлось (mid - не число, а индекс найденного числа)
 
 
 def user_input(): # функция взаимодействия с пользователем
