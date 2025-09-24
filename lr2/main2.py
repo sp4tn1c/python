@@ -3,10 +3,7 @@
 """
 
 
-from typing import Optional # аннотация типов
-
-
-def main(targets: list[int], value: int) -> Optional[tuple[int, int]]: # функция реализации бинарного поиска
+def main(targets: list, value: int) -> tuple[int, int]: # функция реализации бинарного поиска
     """
     Реализация бинарного поиска.
 
