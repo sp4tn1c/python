@@ -48,8 +48,8 @@ def gen_bin_tree(height: int, root: float) -> list:  # бинарное дере
     В последнем примере root=8, его левая ветвь: 12.0, [18.0, 144.0], его правая ветвь: 64, [96.0, 4096]
     '''
 
-    if type(height) != int or type(root) != int and type(root) != float: # порверка на тип данных
-        return 'Высота и корень дерева должны быть числами'
+    if type(root) != int and type(root) != float or type(height) != int: # проверка на тип данных
+        return 'Неверный тип данных' # root - положительное число, height - натуральное число
 
     elif height < 0 or root < 0: # проверка на корректность ввода высоты дерева и его вершины
         return 'Высота и корень дерева не могут быть отрицательными'
