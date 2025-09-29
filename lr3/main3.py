@@ -1,28 +1,51 @@
-'''
+"""
 Построение бинарного дерева
 Option 8
 Root = 8; height = 4, left_leaf = root+root/2, right_leaf = root^2
-'''
+"""
 
-def left_leaf(root:int): # левая ветка бинарного дерева
+
+def left_leaf(root: int) -> float:  # левая ветка бинарного дерева
     return root + root / 2
 
 
-def right_leaf(root:int) -> int: # левая ветка бинарного дерева
+def right_leaf(root: int) -> int:  # правая ветка бинарного дерева
     return root ** 2
 
 
-def gen_bin_tree(height:int, root) -> list: # бинарное дерево
+def gen_bin_tree(height: int, root) -> list:  # бинарное дерево
     '''
     Функция создания бинарного дерева с помощью рекурсии.
+
+    Структура дерева:
+        - При height = 0 функция возвращает только корень (root)
+        - При height > 0 функция рекурсивно строит дерево (левая и правая ветки):
+            1. Каждый узел (находится внутри квадратных скобок '[]') представляется как
+            [значение, левая_ветка, правая_ветка]
+            2. Сначала выводится корень дерева, затем его левая ветка, для каждого значения
+            левой ветки выводятся свои левые ветки, на нижнем уровне выводится левое и правое значения,
+            правые ветки выводятся после вывода левых веток
+    Пример:
+        >>> gen_bin_tree(0, 8) # height = 0
+        [8]
+        >>> gen_bin_tree(1, 8) # height = 1
+        [8, [12.0, 64]]
+        >>> gen_bin_tree(2, 8) # height = 2
+        [8, [12.0, [18.0, 144.0], 64, [96.0, 4096]]]
+
+    В последнем примере root=8, его левая ветвь: 12.0, [18.0, 144.0], его правая ветвь: 64, [96.0, 4096]
     '''
-    if height == 0: # если высота дерва равна 0, то возвращаем вершину дерева
+
+    if type(height) != int or type(root) != int and type(root) != float:
+        return 'Высота и корень дерева должны быть числами'
+
+    elif height < 0 or root < 0:
+        return 'Высота и корень дерева не могут быть отрицательными'
+
+    elif height == 0:
         return [root]
-    return [root] + [gen_bin_tree(height - 1, left_leaf(root)) + gen_bin_tree(height - 1, right_leaf(root))]
+    else:
+        return [root] + [gen_bin_tree(height - 1, left_leaf(root)) + gen_bin_tree(height - 1, right_leaf(root))]
 
 
-if __name__ == '__main__':
-    gen_bin_tree(4, 8)
-
-
-
+print(gen_bin_tree(4, 8))
