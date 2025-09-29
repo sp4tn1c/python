@@ -49,7 +49,7 @@ def gen_bin_tree(height: int, root: float) -> list:  # бинарное дере
     '''
 
     if type(height) != int or type(root) != int and type(root) != float: # порверка на тип данных
-        return 'Высота и корень дерева должны быть числамаксимальное количество узлов на пути от корневого узла до самого дальнего листового узлами'
+        return 'Высота и корень дерева должны быть числами'
 
     elif height < 0 or root < 0: # проверка на корректность ввода высоты дерева и его вершины
         return 'Высота и корень дерева не могут быть отрицательными'
@@ -60,4 +60,4 @@ def gen_bin_tree(height: int, root: float) -> list:  # бинарное дере
         return [root] + [gen_bin_tree(height - 1, left_leaf(root)) + gen_bin_tree(height - 1, right_leaf(root))] # рекурсия
 
 
-print(gen_bin_tree(4, 8)) # вызов функции
+print(gen_bin_tree(0.5, 2)) # вызов функции
