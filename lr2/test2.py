@@ -1,4 +1,4 @@
-from lab2 import main
+from lab2 import main   
 import unittest
 # import main
 
@@ -18,8 +18,9 @@ class TestGuessingGame(unittest.TestCase):
     def test_guess6(self): # наличие типа данных float
         self.assertEqual(main([1.1, 2.2, 3.3, 4.4, 5.5], 4), None)
     def test_guess7(self): # числа нет в диапазоне
-        self.assertEqual(main([5, 6, 7, 8, 9], 3), None)
+        self.assertEqual(main([1, 2, 3, 4, 5], 6), None)
 
 
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()
