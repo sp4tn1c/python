@@ -60,4 +60,4 @@ def gen_bin_tree(height: int, root: float) -> list:  # бинарное дере
         return [root] + [gen_bin_tree(height - 1, left_leaf(root)) + gen_bin_tree(height - 1, right_leaf(root))] # рекурсия
 
 
-print(gen_bin_tree(8, 4)) # вызов функции
+print(gen_bin_tree(4, 8)) # вызов функции
