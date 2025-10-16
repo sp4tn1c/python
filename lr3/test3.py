@@ -4,10 +4,10 @@ import unittest
 
 class TestBinaryTree(unittest.TestCase):
 
-    def binary_test1(self): # проверка построения дерева с height = 0
+    def test_binary1(self): # проверка построения дерева с height = 0
         self.assertEqual(gen_bin_tree(0, 3), [3])
 
-    def binary_test2(self): # проверка построения дерева с height > 0
+    def test_binary2(self): # проверка построения дерева с height > 0
         self.assertEqual(gen_bin_tree(1, 10), [10, [15.0, 100]])
 
     def test_simple3(self): # проверка построения дерева с нецелым height
@@ -19,7 +19,7 @@ class TestBinaryTree(unittest.TestCase):
     def test_simple5(self): # проверка построения дерева с отрицательным root
         self.assertEqual(gen_bin_tree(1, -2), 'Высота и корень дерева не могут быть отрицательными')
 
-    def test_simple6(self): # проверка построения дерева с height, не являющегося числом
+    def test_simple6(self): # проверка построения дерева с отрицательным root
         self.assertEqual(gen_bin_tree('a', 3), 'Неверный тип данных')
 
     def test_simple7(self): # проверка построения дерева с root, не являющегося числом
