@@ -18,13 +18,12 @@ class TestStreamWrite(unittest.TestCase):
 
 
   def test_writing_stream(self):
-    pass
+    
+      output = self.nonstandardstream.getvalue()
 
+      self.assertRegex(output, r"Ошибка при запросе к API")
 
   def tearDown(self):
-    output = self.nonstandardstream.getvalue()
-
-    self.assertRegex(output, r"Ошибка при запросе к API")
 
     del self.nonstandardstream
 
