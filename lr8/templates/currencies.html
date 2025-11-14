@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+<h1>{{ title }}</h1>
+
+<p><a href="/">Главная</a></p>
+<p><a href="/users">Пользователи</a></p>
+<p><a href="/currencies">Валюты</a></p>
+
+<h2>Курсы валют</h2>
+
+<table border="1" cellpadding="5">
+    <thead>
+        <tr><th>Код</th><th>Курс</th></tr>
+    </thead>
+    <tbody>
+        {% for code, curr in currencies.items() %}
+        <tr>
+            <td>{{ code }}</td>
+            <td>{{ curr.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
