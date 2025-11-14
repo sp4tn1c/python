@@ -1,48 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>{{ title }} | Курсы валют</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>{{ title }}</title>
 </head>
 <body>
-    <div class="container mt-4">
-        <h1>Курсы валют</h1>
 
-        <nav class="mb-4">
-            <ul class="nav nav-pills">
-                {% for item in navigation %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ item.href }}">{{ item.caption }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
+<h1>{{ title }}</h1>
 
-        <!-- Форма выбора валют -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Выберите валюты для отслеживания</h5>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/currencies">
-                    <div class="row">
-                        {% for currency in available_currencies %}
-                            <div class="col-md-3 col-sm-4 col-6 mb-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                           name="currencies" value="{{ currency }}"
-                                           id="currency_{{ currency }}"
-                                           {% if currency in selected_currencies %}checked{% endif %}>
-                                    <label class="form-check-label" for="currency_{{ currency }}">
-                                        {{ currency }}
-                                    </label>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">Обновить список</button>
-                </form>
-            </div>
-        </div>
+<p><a href="/">Главная</a></p>
+<p><a href="/users">Пользователи</a></p>
+<p><a href="/currencies">Валюты</a></p>
+
+<h2>Автор</h2>
+<table border="1" cellpadding="5">
+    <tr><th>Имя</th><td>{{ author.name }}</td></tr>
+    <tr><th>Группа</th><td>{{ author.group }}</td></tr>
+</table>
+
+</body>
+</html>
