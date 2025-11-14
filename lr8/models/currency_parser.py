@@ -1,51 +1,96 @@
 import functools
 import requests
-import sys
-import io
 
-def trace(func=None, *, handle=sys.stdout):
-    print(f"decorated func: {func}, {handle}")
-    if func is None:
-        print('func is None')
-        return lambda func: trace(func, handle=handle)
-    else:
-        print(f'{func.__name__}, {handle}')
+class CurenciesList:
+    def init(self, name_curr: str, currency_id: str,
+                 name: str = "", value: float = 0.0, previous: float = 0.0):
+        self.id = currency_id
+        self.__name_curr = name_curr
+        self.__price = value
+        self.__full_name = name
+        self.__previous = previous
 
-    @functools.wraps(func)
-    def inner(*args, **kwargs):
-        handle.write(f"Using handling output\n")
-        # print(func.__name__, args, kwargs)
-        return func(*args, **kwargs)
+    @property
+    def name_curr(self):
+        return self.__name_curr
 
-    # print('return inner')
-    return inner
+    @name_curr.setter
+    def name_curr(self, name_curr):
+        if len(name_curr) == 3:
+            self.__name_curr = name_curr
+        else:
+            raise ValueError('Имя валюты должно содержать 3 символа')
 
-nonstandardstream = io.StringIO()
+    @property
+    def id(self):
+        return self.__id
 
-@trace(handle=nonstandardstream)
-def increm(x):
-    """Инкремент"""
-    # print("Инкремент")
-    return x+1
+    @id.setter
+    def id(self, currency_id):
+        if currency_id and isinstance(currency_id, str):
+            self.__id = currency_id
+        else:
+            raise ValueError('ID должно быть непустой строкой')
 
-increm(2)
+    @property
+    def price(self):
+        return self.__price
 
-nonstandardstream.getvalue()
+    @price.setter
+    def price(self, price):
+        if price > 0 and isinstance(price, (float, int)):
+            self.__price = float(price)
+        else:
+            raise ValueError('Цена должна быть положительным числом')
+
+    @property
+    def name(self):
+        return self.__full_name
+
+    @property
+    def previous(self):
+        return self.__previous
+
+
+    def __str(self):
+        return f"{self.name_curr} ({self.id}): {self.price:.4f} руб."
+
+    def repr(self):
+        return f"Currency('{self.name_curr}', '{self.id}', {self.price})"
 
 class CurrencyParser:
-    def __init__(self, url: str = "https://www.cbr-xml-daily.ru/daily_json.js",
-                 handle=sys.stdout):
+    """
+    Этот класс нужен для того, чтобы "парсить" (получать) информацию о валютах из функции get_currencies
+    """
+    def init(self, api_url: str = 'https://www.cbr-xml-daily.ru/daily_json.js'):
+        self.api_url = api_url
+        self._currencies_data = {}
 
-        self.url = url
-        self.handle = handle
-
-    def get_currencies(self, currency_codes: list) -> dict:
+    def get_all_available_currencies(self):
         """
-        Возвращает словарь вида:
-        {'USD': 92.15, 'EUR': 100.55, ...}
+        Получает список всех доступных валют из API ЦБ, чтобы пользователь мог выбрать любую интересующую валюту
         """
         try:
-            response = requests.get(self.url)
+            response = requests.get(self.api_url)
+            response.raise_for_status()
+            data = response.json()
+
+            if "Valute" in data:
+                # Возвращаем список всех кодов валют
+                return list(data["Valute"].keys())
+            else:
+                return []
+
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе API: {e}")
+            return []
+
+    def get_currencies(self, currency_codes: list):
+        """
+        Эта функция получает из api ЦБ все курсы валют
+        """
+        try:
+            response = requests.get(self.api_url)
             response.raise_for_status()
             data = response.json()
 
@@ -54,20 +99,27 @@ class CurrencyParser:
             if "Valute" in data:
                 for code in currency_codes:
                     if code in data["Valute"]:
-                        currencies[code] = data["Valute"][code]["Value"]
-                    else:
-                        currencies[code] = f"Код валюты '{code}' не найден."
+                        currency_info = data["Valute"][code]
+                        currency = CurenciesList(
+                            name_curr=code,
+                            currency_id=currency_info["ID"],
+                            # это id валюты
+                            name=currency_info["Name"],
+                            # это имя валюты (пример: Доллар)
+                            value=currency_info["Value"],
+                            # курс валюты
+                            previous=currency_info["Previous"]
+                        #     предыдущий курс валюты, чтобы выяснить измененине
+                        )
+                        currencies[code] = currency
+
+            self._currencies_data.update(currencies)
             return currencies
 
         except requests.exceptions.RequestException as e:
-            self.handle.write(f"Ошибка при запросе к API: {e}")
+            print(f"Ошибка при запросе API: {e}")
             return {}
 
-    # Пример использования функции:
-
-if __name__ == "__main__":
-    parser = CurrencyParser()
-    currency_list = ['USD', 'EUR', 'GBP', 'NNZ']
-
-    result = parser.get_currencies(currency_list)
-    print(result)
+    def update_selected_currencies(self, new_currencies: list):
+        """Обновляет список отслеживаемых валют"""
+        return self.get_currencies(new_currencies)
