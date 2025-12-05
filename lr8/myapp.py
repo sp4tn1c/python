@@ -1,62 +1,88 @@
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, PackageLoader, select_autoescape
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
+from controllers.databasecontroller import CurrencyRatesCRUD
+from models import Author
 
-from models.author import Author
-from models.user import User
-from models.currency_parser import CurrencyParser
+from controllers import databasecontroller
 
 env = Environment(
-    loader=FileSystemLoader("templates"),
+    loader=PackageLoader("myapp"),
     autoescape=select_autoescape()
 )
 
-index_template = env.get_template("index.html")
-users_template = env.get_template("users.html")
-currencies_template = env.get_template("currencies.html")
 
-main_author = Author("Kirichenko Denis", "P3122")
+class CurrencyRatesMock():
+    def __init__(self):
+        self.__values = [("USD", "90"),
+                         ("EUR", "91"),
+                         ("GBP", '100'),
+                         ("AUD", '52.8501')]
 
-users = [User(1, "Kirichenko Denis")]
+    @property
+    def values(self):
+        return self.__values
 
-CURRENCY_LIST = ["USD", "EUR", "GBP", "JPY", "CNY"]
+
+c_r = CurrencyRatesMock()
+
+c_r_controller = databasecontroller.CurrencyRatesCRUD(c_r)
+c_r_controller._create()
+# print(c_r.values)
+
+# main_author = author.Author('Nikolai', 'P2345')
+main_author = Author('Nikolai', 'P2345')
+
+template = env.get_template("index.html")
+
+
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-
-        if self.path == "/":
-            html = index_template.render(
-                title="Главная",
-                author=main_author
-            )
-
-        elif self.path == "/users":
-            html = users_template.render(
-                title="Пользователи",
-                users=users
-            )
-
-        elif self.path == "/currencies":
-            parser = CurrencyParser()
-            currencies = parser.get_currencies(CURRENCY_LIST)
-
-            html = currencies_template.render(
-                title="Курсы валют",
-                currencies=currencies
-            )
-
-        else:
-            self.send_error(404, "Страница не найдена")
-            return
+        global template
+        global c_r_controller
 
         self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        print(self.path)
+        url_query_dict = parse_qs(self.path.rpartition('?')[-1])
+        if self.path == '/':
+            # root url
+            result = template.render(myapp="CurrenciesListApp",
+                            navigation=[{'caption': 'Основная страница',
+                                         'href': "https://nickzhukov.ru"},
+                                        {'caption': 'Об авторе', 'href': '/author'}
+                                        ],
+                            author_name=main_author.name,
+                            author_group=main_author.group,
+                                     currencies= c_r_controller._read()
+                                     )
+
+        if 'currency/delete' in self.path:
+            # print(self.path.rpartition('?')[-1])
+            c_r_controller._delete(url_query_dict['id'][0])
+            # print(user_params_dict['id'][0])
+
+            # c_r_controller._delete(user_id = )
+
+        if 'currency/show' in self.path:
+            print(c_r_controller._read())
+
+        if 'currency/update' in self.path:
+            # localhost:8080?usd=100000.100
+            if 'usd' or 'USD' in url_query_dict:
+                c_r_controller._update({'USD': url_query_dict['usd'][0]})
+                result = template.render(result=f'обновление {url_query_dict} завершено')
+
+
+
         self.end_headers()
-        self.wfile.write(html.encode("utf-8"))
+        # result = "<html><h1>Hello, world!</h1></html>"
+        self.wfile.write(bytes(result, "utf-8"))
 
 
-if __name__ == "__main__":
-    httpd = HTTPServer(("localhost", 8081), SimpleHTTPRequestHandler)
-    print("Сервер запущен: http://localhost:8081")
-    httpd.serve_forever()
+httpd = HTTPServer(('localhost', 8080), SimpleHTTPRequestHandler)
+print('server is running')
+httpd.serve_forever()
