@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Курс обновлен</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #0066cc; }
+        .info { background: #e6f2ff; padding: 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/author">Об авторе</a>
+        <a href="/users">Пользователи</a>
+        <a href="/currencies">Валюты</a>
+    </nav>
+
+    <h1>Курс валюты обновлен</h1>
+
+    <div class="info">
+        <p><strong>Валюта:</strong> {{ currency_code }}</p>
+        <p><strong>Новый курс:</strong> {{ new_value }} руб.</p>
+        <p><strong>Старый курс:</strong> {{ old_value }} руб.</p>
+        <p><strong>Изменение:</strong> {{ change }} руб.</p>
+    </div>
+
+    <p>
+        <a href="/currencies">← Вернуться к валютам</a> |
+        <a href="/">На главную</a>
+    </p>
+</body>
+</html>
