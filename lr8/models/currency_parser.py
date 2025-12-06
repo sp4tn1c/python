@@ -2,7 +2,30 @@ import functools
 import requests
 
 class CurenciesList:
-    def init(self, name_curr: str, currency_id: str,
+    
+    """
+    Парсер курсов валют с внешнего API Центробанка России.
+    
+    Использует публичное API: https://www.cbr-xml-daily.ru/daily_json.js
+    для получения актуальных курсов валют.
+    
+    Пример ответа API:
+    {
+        "Valute": {
+            "USD": {
+                "ID": "R01235",
+                "NumCode": "840",
+                "CharCode": "USD",
+                "Nominal": 1,
+                "Name": "Доллар США",
+                "Value": 90.5,
+                "Previous": 90.3
+            }
+        }
+    }
+    """
+    
+    def __init__(self, name_curr: str, currency_id: str,
                  name: str = "", value: float = 0.0, previous: float = 0.0):
         self.id = currency_id
         self.__name_curr = name_curr
@@ -86,9 +109,28 @@ class CurrencyParser:
             return []
 
     def get_currencies(self, currency_codes: list):
+        
         """
-        Эта функция получает из api ЦБ все курсы валют
+        Получает курсы указанных валют с внешнего API.
+        
+        Args:
+            currency_codes (list): Список кодов валют для получения
+                                  (например: ['USD', 'EUR', 'GBP'])
+        
+        Returns:
+            dict: Словарь с объектами CurenciesList для каждой найденной валюты
+                  Ключ - код валюты, значение - объект CurenciesList
+        
+        Raises:
+            requests.RequestException: При ошибках сетевого запроса
+            
+        Пример возвращаемого значения:
+            {
+                'USD': CurenciesList('USD', 'R01235', 'Доллар США', 90.5, 90.3),
+                'EUR': CurenciesList('EUR', 'R01239', 'Евро', 99.3, 99.1)
+            }
         """
+        
         try:
             response = requests.get(self.api_url)
             response.raise_for_status()
