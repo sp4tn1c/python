@@ -65,7 +65,7 @@ class CurrencyRatesCRUD():
         if char_code and len(char_code) == 3:
             # Параметризованный запрос по коду
             sql = "SELECT * FROM currency WHERE char_code = ?"
-            self.__cursor.execute(sql, (char_code,))
+            self.__cursor.execute(sql, char_code)
         else:
             # Все валюты
             self.__cursor.execute("SELECT * FROM currency")
@@ -86,18 +86,18 @@ class CurrencyRatesCRUD():
 
         return result_data
 
-    def _delete(self, currency_id):
-        del_statement = "DELETE FROM currency WHERE id = " + str(currency_id)
+        def _delete(self, currency_id):
+        del_statement = "DELETE FROM currency WHERE id = "
         print(del_statement)
-        self.__cursor.execute(del_statement)
+        self.__cursor.execute(del_statement, currency_id)
         self.__con.commit()
 
     def _update(self, currency: dict['str': float]):
         currency_code = tuple(currency.keys())[0]
         currency_value = tuple(currency.values())[0]
-        upd_statement = f"UPDATE currency SET value = {currency_value} WHERE char_code = '" + str(currency_code) + "'"
+        upd_statement = f"UPDATE currency SET value = {currency_value} WHERE char_code = '"
         print(upd_statement)
-        self.__cursor.execute(upd_statement)
+        self.__cursor.execute(upd_statement, currency_code)
         self.__con.commit()
 
     def __del__(self):
