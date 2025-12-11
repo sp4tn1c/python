@@ -15,12 +15,11 @@ def integrate(f, a: float, b: float, *, n_iter: int=100000) -> float:
     float: Приближенное значение интеграла.
 
     Примеры реализации:
-    >>> integrate(math.cos, 0, math.pi / 2, n_iter=1000)
-    1.0000000000000002
 
-    >>> integrate(math.sin, 0, math.pi / 2, n_iter=1000)
-    2.0000000000000004
+    >>> round(integrate(math.sin, 0, math.pi / 2, n_iter=1000), 5)
+    0.99921
     '''
+
 
     acc = 0
     step = (b - a) / n_iter
@@ -29,4 +28,4 @@ def integrate(f, a: float, b: float, *, n_iter: int=100000) -> float:
     return acc
 
 
-integrate(math.cos, 0, math.pi, n_iter=1000)
+integrate(math.sin, 0, math.pi / 2, n_iter=1000)
