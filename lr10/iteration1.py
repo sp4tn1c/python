@@ -1,0 +1,32 @@
+import math
+
+# итерация 1
+def integrate(f, a, b, *, n_iter=100000):
+    '''
+    Численное интегрирование функции методом левых прямоугольников на промежутке [a, b].
+
+    Parameters:
+    f (callable): Интегрируемая функция одного аргумента.
+    a (float): Нижний предел интегрирования.
+    b (float): Верхний предел интегрирования.
+    n_iter (int): Количество итераций (разбиений интервала), по умолчанию 100000.
+
+    Returns:
+    float: Приближенное значение интеграла.
+
+    Примеры реализации:
+    >>> integrate(math.cos, 0, math.pi / 2, n_iter=1000)
+    1.0000000000000002
+
+    >>> integrate(math.sin, 0, math.pi / 2, n_iter=1000)
+    2.0000000000000004
+    '''
+
+    acc = 0
+    step = (b - a) / n_iter
+    for i in range(n_iter):
+        acc += f(a + i*step) * step
+    return acc
+
+
+integrate(math.cos, 0, math.pi, n_iter=1000)
