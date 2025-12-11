@@ -2,6 +2,7 @@ import requests
 import json
 import functools
 import logging
+import sys
 
 def logger(func=None, *, handles=sys.stdout):
     """
