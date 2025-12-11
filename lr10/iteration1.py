@@ -1,7 +1,7 @@
 import math
 
 # итерация 1
-def integrate(f, a, b, *, n_iter=100000):
+def integrate(f, a: float, b: float, *, n_iter: int=100000) -> float:
     '''
     Численное интегрирование функции методом левых прямоугольников на промежутке [a, b].
 
