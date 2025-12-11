@@ -54,18 +54,11 @@ def integrate_async(f, a: float, b: float, *, n_jobs: int = 2, n_iter: int = 100
     float
         Приближенное значение интеграла ∫[a, b] f(x) dx.
 
-    Примеры реализации:
-        >>> round(integrate_async(math.log2, 1, 2, n_iter=10000), 5)
-        Работник 0, границы: 1.0, 1.5
-        Работник 1, границы: 1.5, 2.0
-        0.55725
-
-        >>> integrate_async(math.sin, 0, math.pi, n_jobs=4, n_iter=10000)
-        Работник 0, границы: 0.0, 0.7853981633974483
-        Работник 1, границы: 0.7853981633974483, 1.5707963267948966
-        Работник 2, границы: 1.5707963267948966, 2.356194490192345
-        Работник 3, границы: 2.356194490192345, 3.141592653589793
-        2.000000000000001
+    Пример реализации:
+    >>> round(integrate_async(math.cos, 0, math.pi, n_iter=10000), 6)
+    Работник 0, границы: 0.0, 1.5707963267948966
+    Работник 1, границы: 1.5707963267948966, 3.141592653589793
+    0.000314
     '''
 
     executor = ftres.ThreadPoolExecutor(max_workers=n_jobs)
@@ -78,3 +71,4 @@ def integrate_async(f, a: float, b: float, *, n_jobs: int = 2, n_iter: int = 100
     fs = [spawn(a + i * step, a + (i + 1) * step) for i in range(n_jobs)]
 
     return sum(list(f.result() for f in ftres.as_completed(fs)))
+
