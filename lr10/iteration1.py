@@ -15,9 +15,13 @@ def integrate(f, a: float, b: float, *, n_iter: int=100000) -> float:
     float: Приближенное значение интеграла.
 
     Примеры реализации:
+    >>> # 1. Простая тригонометрическая функция sin(x)
+    >>> round(integrate(math.sin, 0, math.pi, n_iter=1000), 5)
+    2.0
 
-    >>> round(integrate(math.sin, 0, math.pi / 2, n_iter=1000), 5)
-    0.99921
+    >>> # 2. Полиномиальная функция второго порядка x²
+    >>> round(integrate(lambda x: x**2, 0, 1, n_iter=1000), 5)
+    0.33283
     '''
 
 
@@ -29,3 +33,4 @@ def integrate(f, a: float, b: float, *, n_iter: int=100000) -> float:
 
 
 integrate(math.sin, 0, math.pi / 2, n_iter=1000)
+
