@@ -1,33 +1,60 @@
-import math
+import cython
+from libc.math cimport sin, cos, exp
 
+cdef extern from "math.h":
+    double pow(double x, double y)
 
-def integrate_cython_pure(func, double a, double b, int n_iter=1000):
+# 1. C-функция (только внутри Cython)
+
+@cython.cdivision(True)
+cdef double integrate_c_version(double (*f)(double), double a, double b, int n_iter):
     cdef double h = (b - a) / n_iter
     cdef double total = 0.0
     cdef int i
-    cdef double x_left, x_right, x_mid
+    cdef double x
 
     for i in range(n_iter):
-        x_left = a + i * h
-        x_right = x_left + h
-        x_mid = (x_left + x_right) / 2
-        total += func(x_mid) * h
+        x = a + i * h
+        total += f(x)
 
-    return total
+    return total * h
 
+# 2. Гибридные функции (быстрые, для конкретных функций)
 
-def integrate_cython_optimized(func, double a, double b, int n_iter=1000):
+cpdef double integrate_fast_sin(double a, double b, int n_iter=100000):
+    return integrate_c_version(sin, a, b, n_iter)
+
+cpdef double integrate_fast_cos(double a, double b, int n_iter=100000):
+    return integrate_c_version(cos, a, b, n_iter)
+
+cpdef double integrate_fast_exp(double a, double b, int n_iter=100000):
+    return integrate_c_version(exp, a, b, n_iter)
+
+cpdef double integrate_fast_pow2(double a, double b, int n_iter=100000):
     cdef double h = (b - a) / n_iter
     cdef double total = 0.0
     cdef int i
-    cdef double x_mid
+    cdef double x
 
     for i in range(n_iter):
-        x_mid = a + (i + 0.5) * h
-        total += func(x_mid)
+        x = a + i * h
+        total += x * x
+
+    return total * h
+
+# 3. Универсальная, для любых функций Python)
+
+def integrate_python_version(f, double a, double b, int n_iter=100000):
+    cdef double h = (b - a) / n_iter
+    cdef double total = 0.0
+    cdef int i
+    cdef double x
+
+    for i in range(n_iter):
+        x = a + i * h
+        total += f(x)
 
     return total * h
 
 
-def integrate_cython(f, a, b, n_iter=1000):
-    return integrate_cython_optimized(f, a, b, n_iter)
+integrate = integrate_python_version
