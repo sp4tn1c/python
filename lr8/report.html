@@ -1,331 +1,193 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Отчет по лабораторной работе №9</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        
-        h1, h2, h3, h4 {
-            color: #2c3e50;
-            margin-top: 30px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #2980b9;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .section {
-            background-color: white;
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-        
-        .code-block {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        
-        .code-block .keyword {
-            color: #3498db;
-            font-weight: bold;
-        }
-        
-        .code-block .string {
-            color: #2ecc71;
-        }
-        
-        .code-block .comment {
-            color: #95a5a6;
-            font-style: italic;
-        }
-        
-        .code-block .function {
-            color: #9b59b6;
-        }
-        
-        .code-block .number {
-            color: #e74c3c;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        th {
-            background-color: #3498db;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-        
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        ul, ol {
-            padding-left: 20px;
-        }
-        
-        li {
-            margin: 8px 0;
-        }
-        
-        .model-property {
-            display: inline-block;
-            background-color: #e8f4fc;
-            padding: 3px 8px;
-            border-radius: 3px;
-            margin: 2px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
-        
-        .highlight {
-            background-color: #fffacd;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-weight: bold;
-        }
-        
-        .note {
-            background-color: #e8f4fc;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 3px;
-        }
-        
-        .architecture {
-            background-color: #fff8e1;
-            border-left: 4px solid #f39c12;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 3px;
-        }
+        body { font-family: Arial; margin: 40px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2, h3, h4 { color: #333; }
+        h1 { border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { border-bottom: 2px solid #3498db; padding-bottom: 8px; margin-top: 25px; }
+        h3 { border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 10px 0; }
+        code { font-family: 'Courier New', monospace; }
+        ul { margin: 10px 0 10px 20px; }
+        li { margin-bottom: 5px; }
+        .note { background: #e8f4fc; border-left: 4px solid #3498db; padding: 10px; margin: 15px 0; }
+        .warning { background: #fff8e1; border-left: 4px solid #ffc107; padding: 10px; margin: 15px 0; }
+        .success { background: #e8f6f3; border-left: 4px solid #1abc9c; padding: 10px; margin: 15px 0; }
+        .highlight { background: #fffacd; padding: 2px 4px; border-radius: 3px; }
+        .sql-keyword { color: #f56565; }
+        .sql-string { color: #f6ad55; }
+        .sql-comment { color: #a0aec0; font-style: italic; }
+        .sql-number { color: #63b3ed; }
     </style>
 </head>
 <body>
-
-<div class="section">
-    <h1>ОТЧЁТ ПО 9 ЛАБОРАТОРНОЙ РАБОТЕ</h1>
-</div>
-
-<div class="section">
+<div class="container">
+    <h1>ОТЧЕТ ПО ЛАБОРАТОРНОЙ РАБОТЕ №9</h1>
+    
     <h2>Цель работы</h2>
     <ul>
-        <li>Реализовать <span class="highlight">CRUD (Create, Read, Update, Delete)</span> для сущностей бизнес-логики приложения.</li>
-        <li>Освоить работу с <span class="highlight">SQLite в памяти (:memory:)</span> через модуль <code>sqlite3</code>.</li>
-        <li>Понять принципы <span class="highlight">первичных и внешних ключей</span> и их роль в связях между таблицами.</li>
+        <li>Реализовать CRUD (Create, Read, Update, Delete) для сущностей бизнес-логики приложения.</li>
+        <li>Освоить работу с SQLite в памяти (:memory:) через модуль sqlite3.</li>
+        <li>Понять принципы первичных и внешних ключей и их роль в связях между таблицами.</li>
         <li>Выделить контроллеры для работы с БД и для рендеринга страниц в отдельные модули.</li>
-        <li>Использовать архитектуру <span class="highlight">MVC</span> и соблюдать разделение ответственности.</li>
+        <li>Использовать архитектуру MVC и соблюдать разделение ответственности.</li>
         <li>Отображать пользователям таблицу с валютами, на которые они подписаны.</li>
-        <li>Реализовать полноценный роутер, который обрабатывает <span class="highlight">GET-запросы</span> и выполняет сохранение/обновление данных и рендеринг страниц.</li>
-        <li>Научиться тестировать функционал на примере сущностей <code>currency</code> и <code>user</code> с использованием <code>unittest.mock</code>.</li>
+        <li>Реализовать полноценный роутер, который обрабатывает GET-запросы и выполняет сохранение/обновление данных и рендеринг страниц.</li>
+        <li>Научиться тестировать функционал на примере сущностей currency и user с использованием unittest.mock.</li>
     </ul>
-</div>
-
-<div class="section">
-    <h2>Описание моделей, их свойств и связей</h2>
+    
+    <h2>2) Описание моделей, их свойств и связей</h2>
     
     <h3>2.1. Модель Author (models/author.py)</h3>
     <p>Представляет информацию об авторе проекта:</p>
     <ul>
-        <li><span class="model-property">name (str)</span> — имя автора с валидацией минимальной длины</li>
-        <li><span class="model-property">group (str)</span> — номер учебной группы с валидацией формата "PXXXX"</li>
+        <li>name (str) — имя автора с валидацией минимальной длины</li>
+        <li>group (str) — номер учебной группы с валидацией формата "PXXXX"</li>
         <li>Оба свойства доступны только для чтения (readonly properties)</li>
     </ul>
     
     <h3>2.2. Модель Currency (models/currency.py)</h3>
     <p>Представляет информацию о валюте:</p>
     <ul>
-        <li><span class="model-property">num_code (str)</span> — цифровой код валюты</li>
-        <li><span class="model-property">char_code (str)</span> — буквенный код валюты (3 символа) с валидацией</li>
-        <li><span class="model-property">name (str)</span> — название валюты</li>
-        <li><span class="model-property">value (float)</span> — курс к рублю с валидацией на положительность</li>
-        <li><span class="model-property">nominal (int)</span> — номинал</li>
+        <li>num_code (str) — цифровой код валюты</li>
+        <li>char_code (str) — буквенный код валюты (3 символа) с валидацией</li>
+        <li>name (str) — название валюты</li>
+        <li>value (float) — курс к рублю с валидацией на положительность</li>
+        <li>nominal (int) — номинал</li>
     </ul>
     
     <h3>2.3. Модель User (models/user.py)</h3>
     <p>Представляет пользователя системы:</p>
     <ul>
-        <li><span class="model-property">id (int)</span> — уникальный идентификатор</li>
-        <li><span class="model-property">name (str)</span> — имя пользователя с валидацией</li>
-        <li><span class="model-property">subscribed_currencies (list[str])</span> — список кодов подписанных валют</li>
-        <li>Методы: <code>subscribe_to_currency()</code>, <code>unsubscribe_from_currency()</code></li>
+        <li>id (int) — уникальный идентификатор</li>
+        <li>name (str) — имя пользователя с валидацией</li>
+        <li>subscribed_currencies (list[str]) — список кодов подписанных валют</li>
+        <li>Методы: subscribe_to_currency(), unsubscribe_from_currency()</li>
     </ul>
     
     <h3>2.4. Модель CurenciesList (models/currency_parser.py)</h3>
     <p>Для работы с внешним API курсов валют:</p>
     <ul>
-        <li><span class="model-property">id (str)</span> — идентификатор валюты из API</li>
-        <li><span class="model-property">name_curr (str)</span> — код валюты (3 символа)</li>
-        <li><span class="model-property">price (float)</span> — текущий курс</li>
-        <li><span class="model-property">name (str)</span> — полное название валюты</li>
-        <li><span class="model-property">previous (float)</span> — предыдущее значение курса</li>
+        <li>id (str) — идентификатор валюты из API</li>
+        <li>name_curr (str) — код валюты (3 символа)</li>
+        <li>price (float) — текущий курс</li>
+        <li>name (str) — полное название валюты</li>
+        <li>previous (float) — предыдущее значение курса</li>
     </ul>
     
     <h3>2.5. Связи между моделями</h3>
     <ul>
-        <li>Один <span class="highlight">User</span> может иметь много подписок на <span class="highlight">Currency</span> (many-to-many)</li>
-        <li>Связь реализована через промежуточную таблицу <code>user_currency</code> в БД</li>
-        <li><span class="highlight">Author</span> является отдельной сущностью без связей с другими моделями</li>
+        <li>Один User может иметь много подписок на Currency (many-to-many)</li>
+        <li>Связь реализована через промежуточную таблицу user_currency в БД</li>
+        <li>Author является отдельной сущностью без связей с другими моделями</li>
     </ul>
-</div>
-
-<div class="section">
-    <h2>Структура проекта</h2>
+    
+    <h2>3) Структура проекта</h2>
     <div class="note">
-        <p><strong>Примечание:</strong> Файл находится в папке Google Диска</p>
+        <p>(файл находится в папке гугл диска)</p>
     </div>
-</div>
-
-<div class="section">
-    <h2>Реализация CRUD с примерами SQL-запросов</h2>
+    
+    <h2>4) Реализация CRUD с примерами SQL-запросов</h2>
     
     <h3>4.1. Класс CurrencyRatesCRUD (databasecontroller.py)</h3>
     
     <h4>Create — Создание записей</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">_create</span>(<span class="keyword">self</span>):
-    __params = <span class="keyword">self</span>.__currency_rates_obj.values
+<pre><code>def _create(self):
+    __params = self.__currency_rates_obj.values
     
     named_params = []
-    <span class="keyword">for</span> currency_tuple <span class="keyword">in</span> __params:
+    for currency_tuple in __params:
         named_params.append({
-            <span class="string">'num_code'</span>: <span class="string">'000'</span>,
-            <span class="string">'char_code'</span>: currency_tuple[<span class="number">0</span>],
-            <span class="string">'name'</span>: <span class="string">f'Валюта {currency_tuple[0]}'</span>,
-            <span class="string">'value'</span>: <span class="keyword">float</span>(currency_tuple[<span class="number">1</span>]) <span class="keyword">if</span> currency_tuple[<span class="number">1</span>] <span class="keyword">else</span> <span class="number">0.0</span>,
-            <span class="string">'nominal'</span>: <span class="number">1</span>
+            'num_code': '000',
+            'char_code': currency_tuple[0],
+            'name': f'Валюта {currency_tuple[0]}',
+            'value': float(currency_tuple[1]) if currency_tuple[1] else 0.0,
+            'nominal': 1
         })
     
-    __sqlquery = <span class="string">'''
+    __sqlquery = '''
         INSERT INTO currency (num_code, char_code, name, value, nominal) 
         VALUES (:num_code, :char_code, :name, :value, :nominal)
-    '''</span>
-    <span class="keyword">self</span>.__cursor.executemany(__sqlquery, named_params)
-    <span class="keyword">self</span>.__con.commit()</div>
+    '''
+    self.__cursor.executemany(__sqlquery, named_params)
+    self.__con.commit()</code></pre>
     
     <h4>Read - чтение записей</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">_read</span>(<span class="keyword">self</span>, char_code: <span class="keyword">str</span> = <span class="keyword">None</span>):
-    <span class="keyword">if</span> char_code <span class="keyword">and</span> <span class="function">len</span>(char_code) == <span class="number">3</span>:
-        <span class="comment"># Параметризованный запрос для предотвращения SQL-инъекций</span>
-        sql = <span class="string">"SELECT * FROM currency WHERE char_code = ?"</span>
-        <span class="keyword">self</span>.__cursor.execute(sql, (char_code,))
-    <span class="keyword">else</span>:
-        <span class="comment"># Получение всех записей</span>
-        <span class="keyword">self</span>.__cursor.execute(<span class="string">"SELECT * FROM currency"</span>)
+<pre><code>def _read(self, char_code: str = None):
+    if char_code and len(char_code) == 3:
+        # Параметризованный запрос для предотвращения SQL-инъекций
+        sql = "SELECT * FROM currency WHERE char_code = ?"
+        self.__cursor.execute(sql, (char_code,))
+    else:
+        # Получение всех записей
+        self.__cursor.execute("SELECT * FROM currency")
     
-    <span class="comment"># Преобразование результатов в список словарей</span>
+    # Преобразование результатов в список словарей
     result_data = []
-    <span class="keyword">for</span> _row <span class="keyword">in</span> <span class="keyword">self</span>.__cursor.fetchall():
+    for _row in self.__cursor.fetchall():
         _d = {
-            <span class="string">'id'</span>: <span class="keyword">int</span>(_row[<span class="number">0</span>]),
-            <span class="string">'num_code'</span>: _row[<span class="number">1</span>],
-            <span class="string">'char_code'</span>: _row[<span class="number">2</span>],
-            <span class="string">'name'</span>: _row[<span class="number">3</span>],
-            <span class="string">'value'</span>: <span class="keyword">float</span>(_row[<span class="number">4</span>]) <span class="keyword">if</span> _row[<span class="number">4</span>] <span class="keyword">else</span> <span class="number">0.0</span>,
-            <span class="string">'nominal'</span>: <span class="keyword">int</span>(_row[<span class="number">5</span>]) <span class="keyword">if</span> _row[<span class="number">5</span>] <span class="keyword">else</span> <span class="number">1</span>
+            'id': int(_row[0]),
+            'num_code': _row[1],
+            'char_code': _row[2],
+            'name': _row[3],
+            'value': float(_row[4]) if _row[4] else 0.0,
+            'nominal': int(_row[5]) if _row[5] else 1
         }
         result_data.append(_d)
     
-    <span class="keyword">return</span> result_data</div>
+    return result_data</code></pre>
     
     <h4>Update - обновление записей</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">_update</span>(<span class="keyword">self</span>, currency: <span class="keyword">dict</span>[<span class="string">'str'</span>: <span class="keyword">float</span>]):
-    currency_code = <span class="function">tuple</span>(currency.keys())[<span class="number">0</span>]
-    currency_value = <span class="function">tuple</span>(currency.values())[<span class="number">0</span>]
+<pre><code>def _update(self, currency: dict['str': float]):
+    currency_code = tuple(currency.keys())[0]
+    currency_value = tuple(currency.values())[0]
     
-    <span class="comment"># SQL-запрос для обновления курса валюты</span>
-    upd_statement = <span class="string">f"UPDATE currency SET value = {currency_value} WHERE char_code = '{currency_code}'"</span>
-    <span class="keyword">self</span>.__cursor.execute(upd_statement)
-    <span class="keyword">self</span>.__con.commit()</div>
+    # SQL-запрос для обновления курса валюты
+    upd_statement = f"UPDATE currency SET value = {currency_value} WHERE char_code = '{currency_code}'"
+    self.__cursor.execute(upd_statement)
+    self.__con.commit()</code></pre>
     
     <h4>Delete - удаление записей</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">_delete</span>(<span class="keyword">self</span>, currency_id):
-    <span class="comment"># SQL-запрос для удаления валюты по ID</span>
-    del_statement = <span class="string">"DELETE FROM currency WHERE id = ?"</span>
-    <span class="keyword">self</span>.__cursor.execute(del_statement, (currency_id,))
-    <span class="keyword">self</span>.__con.commit()</div>
+<pre><code>def _delete(self, currency_id):
+    # SQL-запрос для удаления валюты по ID
+    del_statement = "DELETE FROM currency WHERE id = ?"
+    self.__cursor.execute(del_statement, (currency_id,))
+    self.__con.commit()</code></pre>
     
     <h3>4.2. Создание таблиц в БД</h3>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">__createtable</span>(<span class="keyword">self</span>):
-    <span class="comment"># Таблица пользователей</span>
-    <span class="keyword">self</span>.__con.execute(
-        <span class="string">"CREATE TABLE user ("
+<pre><code>def __createtable(self):
+    # Таблица пользователей
+    self.__con.execute(
+        "CREATE TABLE user ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "name TEXT NOT NULL);"</span>)
+        "name TEXT NOT NULL);")
     
-    <span class="comment"># Таблица валют</span>
-    <span class="keyword">self</span>.__con.execute(<span class="string">"CREATE TABLE currency ("
+    # Таблица валют
+    self.__con.execute("CREATE TABLE currency ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
         "num_code TEXT NOT NULL, "
         "char_code TEXT NOT NULL, "
         "name TEXT NOT NULL, "
         "value FLOAT, "
-        "nominal INTEGER);"</span>)
+        "nominal INTEGER);")
     
-    <span class="comment"># Таблица связи пользователь-валюта (many-to-many)</span>
-    <span class="keyword">self</span>.__con.execute(<span class="string">"CREATE TABLE user_currency ("
+    # Таблица связи пользователь-валюта (many-to-many)
+    self.__con.execute("CREATE TABLE user_currency ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "user_id INTEGER NOT NULL,"
         "currency_id INTEGER NOT NULL,"
         "FOREIGN KEY(user_id) REFERENCES user(id),"
-        "FOREIGN KEY(currency_id) REFERENCES currency(id));"</span>)
+        "FOREIGN KEY(currency_id) REFERENCES currency(id));")
     
-    <span class="keyword">self</span>.__con.commit()</div>
-</div>
-
-<div class="section">
-    <h2>Скриншоты работы приложения</h2>
+    self.__con.commit()</code></pre>
+    
+    <h2>5) Скриншоты работы приложения</h2>
     <div class="note">
-        <p><strong>Примечание:</strong> Находятся в папке Google Диска</p>
+        <p>(находятся в папке гугл диска)</p>
     </div>
     
     <h3>5.1. Главная страница (index.html)</h3>
@@ -369,81 +231,65 @@
         <li>Перечисление реализованного функционала</li>
         <li>Кнопка возврата на главную страницу</li>
     </ul>
-</div>
-
-<div class="section">
-    <h2>Тестирование</h2>
     
-    <h3>6.1. Модульные тесты моделей</h3>
+    <h2>6.1. Модульные тесты моделей</h2>
     
-    <h4>Тест модели Author (test_author.py):</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">test_author_creation_with_default_group</span>(<span class="keyword">self</span>):
-    <span class="comment">"""Тест создания автора с группой по умолчанию."""</span>
-    author = Author(<span class="string">"Иван Иванов"</span>)
-    <span class="keyword">self</span>.assertEqual(author.name, <span class="string">"Иван Иванов"</span>)
-    <span class="keyword">self</span>.assertEqual(author.group, <span class="string">"P3122"</span>)</div>
+    <h3>Тест модели Author (test_author.py):</h3>
+<pre><code>def test_author_creation_with_default_group(self):
+    """Тест создания автора с группой по умолчанию."""
+    author = Author("Иван Иванов")
+    self.assertEqual(author.name, "Иван Иванов")
+    self.assertEqual(author.group, "P3122")</code></pre>
     
-    <h4>Тест модели User (test_user.py):</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">test_subscribe_to_currency_idempotent</span>(<span class="keyword">self</span>):
-    <span class="comment">"""Тест идимпотентности добавления подписки."""</span>
-    user = User(id=<span class="number">5</span>, name=<span class="string">"Тест идимпотентности"</span>)
-    user.subscribe_to_currency(<span class="string">'USD'</span>)
-    <span class="keyword">self</span>.assertEqual(<span class="function">len</span>(user.subscribed_currencies), <span class="number">1</span>)
+    <h3>Тест модели User (test_user.py):</h3>
+<pre><code>def test_subscribe_to_currency_idempotent(self):
+    """Тест идимпотентности добавления подписки."""
+    user = User(id=5, name="Тест идимпотентности")
+    user.subscribe_to_currency('USD')
+    self.assertEqual(len(user.subscribed_currencies), 1)
     
-    <span class="comment"># Повторное добавление той же валюты</span>
-    user.subscribe_to_currency(<span class="string">'USD'</span>)
-    <span class="keyword">self</span>.assertEqual(<span class="function">len</span>(user.subscribed_currencies), <span class="number">1</span>)  <span class="comment"># Длина не изменилась</span></div>
+    # Повторное добавление той же валюты
+    user.subscribe_to_currency('USD')
+    self.assertEqual(len(user.subscribed_currencies), 1)  # Длина не изменилась</code></pre>
     
-    <h3>6.2. Тесты контроллеров</h3>
+    <h2>6.2. Тесты контроллеров</h2>
     
-    <h4>Тест UserController (test_usercontroller.py):</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">test_singleton_pattern</span>(<span class="keyword">self</span>):
-    <span class="comment">"""Тест паттерна Singleton."""</span>
+    <h3>Тест UserController (test_usercontroller.py):</h3>
+<pre><code>def test_singleton_pattern(self):
+    """Тест паттерна Singleton."""
     controller1 = UserController()
     controller2 = UserController()
-    <span class="keyword">self</span>.assertIs(controller1, controller2)  <span class="comment"># Один и тот же объект</span></div>
+    self.assertIs(controller1, controller2)  # Один и тот же объект</code></pre>
     
-    <h3>6.3. Интеграционные тесты с unittest.mock (mocktest_myapp.py)</h3>
+    <h2>6.3. Интеграционные тесты с unittest.mock (mocktest_myapp.py)</h2>
     
-    <h4>Тестирование HTTP обработчика с mock объектами:</h4>
-    <div class="code-block">
-@patch(<span class="string">'myapp.env.get_template'</span>)
-<span class="keyword">def</span> <span class="function">test_error_rendering</span>(<span class="keyword">self</span>, mock_get_template):
-    <span class="comment">"""Тест рендеринга страницы ошибки."""</span>
+    <h3>Тестирование HTTP обработчика с mock объектами:</h3>
+<pre><code>@patch('myapp.env.get_template')
+def test_error_rendering(self, mock_get_template):
+    """Тест рендеринга страницы ошибки."""
     mock_template = MagicMock()
-    mock_template.render.return_value = <span class="string">"&lt;html&gt;Error&lt;/html&gt;"</span>
+    mock_template.render.return_value = "<html>Error</html>"
     mock_get_template.return_value = mock_template
 
-    <span class="keyword">with</span> patch.object(<span class="keyword">self</span>.handler, <span class="string">'send_response'</span>) <span class="keyword">as</span> mock_send_response:
-        <span class="keyword">self</span>.handler._render_error(<span class="string">"Test error"</span>, <span class="string">"/back"</span>)
-        mock_send_response.assert_called_once_with(<span class="number">200</span>)
-        mock_get_template.assert_called_once_with(<span class="string">"error.html"</span>)</div>
+    with patch.object(self.handler, 'send_response') as mock_send_response:
+        self.handler._render_error("Test error", "/back")
+        mock_send_response.assert_called_once_with(200)
+        mock_get_template.assert_called_once_with("error.html")</code></pre>
     
-    <h4>Тестирование методов перенаправления:</h4>
-    <div class="code-block">
-<span class="keyword">def</span> <span class="function">test_redirect_method</span>(<span class="keyword">self</span>):
-    <span class="comment">"""Тест метода перенаправления."""</span>
-    <span class="keyword">with</span> patch.object(<span class="keyword">self</span>.handler, <span class="string">'send_response'</span>) <span class="keyword">as</span> mock_send_response:
-        <span class="keyword">self</span>.handler._redirect(<span class="string">'/test/path'</span>)
-        mock_send_response.assert_called_once_with(<span class="number">302</span>)</div>
+    <h3>Тестирование методов перенаправления:</h3>
+<pre><code>def test_redirect_method(self):
+    """Тест метода перенаправления."""
+    with patch.object(self.handler, 'send_response') as mock_send_response:
+        self.handler._redirect('/test/path')
+        mock_send_response.assert_called_once_with(302)</code></pre>
+    
+    <h2>7) Выводы</h2>
+    <div class="success">
+        <p>Модели (models/) инкапсулируют бизнес-логику и данные, Реализованы все CRUD операции через класс CurrencyRatesCRUD, реализован собственный HTTP сервер на базе BaseHTTPRequestHandler</p>
+        <p>Обработаны основные маршруты: /, /currencies, /users, /user, /author</p>
+        <p>Поддержка GET и POST запросов с парсингом параметров, Использован шаблонизатор Jinja2 для динамической генерации HTML, разработаны модульные тесты для всех моделей</p>
+        <p>Созданы интеграционные тесты с использованием unittest.mock</p>
+    </div>
 </div>
-
-<div class="section">
-    <h2>Выводы</h2>
-    <ul>
-        <li><span class="highlight">Модели (models/)</span> инкапсулируют бизнес-логику и данные</li>
-        <li>Реализованы все <span class="highlight">CRUD</span> операции через класс <code>CurrencyRatesCRUD</code></li>
-        <li>Реализован собственный <span class="highlight">HTTP сервер</span> на базе <code>BaseHTTPRequestHandler</code></li>
-        <li>Обработаны основные маршруты: <code>/</code>, <code>/currencies</code>, <code>/users</code>, <code>/user</code>, <code>/author</code></li>
-        <li>Поддержка <span class="highlight">GET и POST</span> запросов с парсингом параметров</li>
-        <li>Использован шаблонизатор <span class="highlight">Jinja2</span> для динамической генерации HTML</li>
-        <li>Разработаны <span class="highlight">модульные тесты</span> для всех моделей</li>
-        <li>Созданы <span class="highlight">интеграционные тесты</span> с использованием <code>unittest.mock</code></li>
-    </ul>
-</div>
-
 </body>
 </html>
