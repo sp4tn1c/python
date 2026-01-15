@@ -70,9 +70,18 @@ if __name__ == "__main__":
     r5 = integrate_processes_mp(math.cos, 0.0, math.pi, n_jobs=2, n_iter=n_iter)
     t5 = time.perf_counter() - start
 
-    print(f"Integrate_1:           {t1:.4f} сек | {r1:.5f}")
-    print(f"Integrate_2_async:     {t2:.4f} сек | {r2:.5f}")
-    print(f"Integrate_3_process:   {t3:.4f} сек | {r3:.5f}")
+    print(f"iteration1:                        {t1:.4f} сек | {r1:.5f}")
+    print(f"iteration2_async:                  {t2:.4f} сек | {r2:.5f}")
+    print(f"iteration3_process:                {t3:.4f} сек | {r3:.5f}")
     if cython_ok:
-        print(f"Cython:                {t4:.4f} сек | {r4:.5f}")
-    print(f"Integrate_5_mp:        {t5:.4f} сек | {r5:.5f}")
+        print(f"Cython:                            {t4:.4f} сек | {r4:.5f}")
+    print(f"iteration5_multiprocessing:        {t5:.4f} сек | {r5:.5f}")
+
+    for n_jobs in [2, 4, 6]:
+        print(f"\n{n_jobs} процессов (мультипроцессинг):")
+        start = time.perf_counter()
+        result = integrate_processes_mp(math.sin, 0, math.pi, n_jobs=n_jobs, n_iter=n_iter)
+        elapsed = time.perf_counter() - start
+        print(f"  Время: {elapsed:.4f} сек")
+        print(f"  Результат: {result:.6f}")
+        print('-' * 10)
