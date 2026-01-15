@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет по лабораторной работе №7</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2980b9;
+            padding-bottom: 15px;
+        }
+        
+        h2 {
+            margin-top: 30px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            tab-size: 4;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #f1f8ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            background-color: #1a202c;
+            color: #cbd5e0;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .code-body {
+            padding: 15px;
+            overflow-x: auto;
+        }
+        
+        .code-body pre {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #e2e8f0;
+        }
+        
+        .test-results {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .function-name {
+            color: #2980b9;
+            font-weight: bold;
+        }
+        
+        .decorator-name {
+            color: #8e44ad;
+            font-weight: bold;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .success {
+            color: #27ae60;
+        }
+        
+        .error {
+            color: #e74c3c;
+        }
+        
+        .screenshot-info {
+            background-color: #e8f6f3;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Отчет по лабораторной работе №7</h1>
+        <h2>Декоратор с параметрами для логирования</h2>
+        
+        <p>В данной лабораторной работе был реализован декоратор <span class="decorator-name">logger</span>, который позволяет логировать вызовы функций и их результаты. Декоратор поддерживает два типа обработчиков логов: стандартные потоки вывода (например, <code>sys.stdout</code>) и объекты модуля <code>logging</code>.</p>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Декоратор имеет параметр <code>handles</code>, который может принимать как объект логгера (<code>logging.Logger</code>), так и любой объект с методом <code>write</code> (например, <code>sys.stdout</code>, <code>io.StringIO</code>).</p>
+        </div>
+        
+        <h2>Исходный код декоратора</h2>
+        
+        <div class="code-block">
+            <div class="code-header">logger_decorator.py</div>
+            <div class="code-body">
+                <pre>import functools
+import sys
+import logging
 
+def logger(func=None, *, handles=sys.stdout):
+    """Декоратор для логирования вызовов функций и их результатов.
+    
+    Args:
+        func: Декорируемая функция (используется при вызове без скобок)
+        handles: Объект для записи логов. Может быть:
+                - logging.Logger: логи пишутся методами info/error
+                - любой объект с методом write: логи пишутся в формате INFO/ERROR
+    
+    Returns:
+        Декорированная функция с логированием
+    """
+    if func is None:
+        # Декоратор вызван с параметрами
+        return lambda f: logger(f, handles=handles)
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # Определяем тип обработчика логов
+        is_logging = isinstance(handles, logging.Logger)
+
+        # Логируем начало выполнения функции
+        if is_logging:
+            handles.info(f"Начало {func.__name__}: {args}, {kwargs}")
+        else:
+            handles.write(f"INFO: Начало {func.__name__}: {args}, {kwargs}\n")
+
+        try:
+            # Выполняем декорируемую функцию
+            output = func(*args, **kwargs)
+
+            # Логируем успешное завершение
+            if is_logging:
+                handles.info(f"Конец {func.__name__}: результат={output}")
+            else:
+                handles.write(f"INFO: Конец {func.__name__}: результат={output}\n")
+
+            return output
+
+        except Exception as err:
+            # Логируем ошибку
+            if is_logging:
+                handles.error(f"Ошибка {func.__name__}: {type(err).__name__} - {str(err)}")
+            else:
+                handles.write(f"ERROR: Ошибка {func.__name__}: {type(err).__name__} - {str(err)}\n")
+            raise
+
+    return wrapper</pre>
+            </div>
+        </div>
+        
+        <h2>Пример использования декоратора</h2>
+        
+        <p>Декоратор можно использовать двумя способами:</p>
+        
+        <div class="code-block">
+            <div class="code-header">Способ 1: С указанием параметров</div>
+            <div class="code-body">
+                <pre>@logger(handles=sys.stdout)
+def solve_quadratic(a, b, c):
+    if not all(isinstance(x, (int, float)) for x in [a, b, c]):
+        raise TypeError("Коэффициенты должны быть числами")
+
+    if a == 0:
+        if b == 0:
+            if c == 0:
+                return None
+            raise ValueError("Нет решений")
+        return -c / b
+
+    d = b * b - 4 * a * c
+
+    if d < 0:
+        return None
+    elif d == 0:
+        return -b / (2 * a)
+    else:
+        r1 = (-b + d ** 0.5) / (2 * a)
+        r2 = (-b - d ** 0.5) / (2 * a)
+        return (r1, r2)</pre>
+            </div>
+        </div>
+        
+        <div class="code-block">
+            <div class="code-header">Способ 2: Без параметров (используются значения по умолчанию)</div>
+            <div class="code-body">
+                <pre>@logger
+def multiply(x, y):
+    return x * y</pre>
+            </div>
+        </div>
+        
+        <h2>Тестирование декоратора</h2>
+        
+        <p>Для проверки корректности работы декоратора были написаны следующие тесты:</p>
+        
+        <div class="code-block">
+            <div class="code-header">test_logger.py</div>
+            <div class="code-body">
+                <pre>import unittest
+import io
+import sys
+
+class TestLogger(unittest.TestCase):
+    def setUp(self):
+        self.stream = io.StringIO()
+    
+    def test_logging_success(self):
+        @logger(handles=self.stream)
+        def test_function(x):
+            return x * 2
+        
+        result = test_function(5)
+        self.assertEqual(result, 10)
+        
+        logs = self.stream.getvalue()
+        self.assertRegex(logs, r"INFO.*Начало test_function")
+    
+    def test_logging_on_error(self):
+        @logger(handles=self.stream)
+        def error_function():
+            raise ValueError("Test error message")
+        
+        with self.assertRaises(ValueError):
+            error_function()
+        
+        logs = self.stream.getvalue()
+        self.assertRegex(logs, r"ERROR.*ValueError")
+
+class TestLoggerDecorator(unittest.TestCase):
+    def test_stringio_captures_logs(self):
+        stream = io.StringIO()
+        @logger(handles=stream)
+        def test_func(x):
+            return x + 1
+        
+        test_func(10)
+        logs = stream.getvalue()
+        self.assertIn("test_func", logs)
+
+if __name__ == '__main__':
+    unittest.main()</pre>
+            </div>
+        </div>
+        
+        <div class="test-results">
+            <h3>Результаты тестирования</h3>
+            <p><span class="success">✓</span> Тест <code>test_logging_success</code> проверяет корректность логирования успешного выполнения функции</p>
+            <p><span class="success">✓</span> Тест <code>test_logging_on_error</code> проверяет логирование исключений</p>
+            <p><span class="success">✓</span> Тест <code>test_stringio_captures_logs</code> проверяет работу декоратора с объектом <code>io.StringIO</code></p>
+        </div>
+        
+        <h2>Пример работы декоратора</h2>
+        
+        <div class="code-block">
+            <div class="code-header">Пример выполнения</div>
+            <div class="code-body">
+                <pre># Пример использования с решением квадратного уравнения
+print("Решение уравнения x² - 5x + 6 = 0:")
+result1 = solve_quadratic(1, -5, 6)
+print(f"Результат: {result1}")
+
+print("\nРешение уравнения x² + 1 = 0:")
+result2 = solve_quadratic(1, 0, 1)
+print(f"Результат: {result2}")
+
+print("\nРешение уравнения с ошибкой:")
+try:
+    solve_quadratic("a", 2, 3)
+except TypeError as e:
+    print(f"Поймано исключение: {e}")</pre>
+            </div>
+        </div>
+        
+        <div class="code-block">
+            <div class="code-header">Ожидаемый вывод в консоль</div>
+            <div class="code-body">
+                <pre>Решение уравнения x² - 5x + 6 = 0:
+INFO: Начало solve_quadratic: (1, -5, 6), {}
+INFO: Конец solve_quadratic: результат=(3.0, 2.0)
+Результат: (3.0, 2.0)
+
+Решение уравнения x² + 1 = 0:
+INFO: Начало solve_quadratic: (1, 0, 1), {}
+INFO: Конец solve_quadratic: результат=None
+Результат: None
+
+Решение уравнения с ошибкой:
+INFO: Начало solve_quadratic: ('a', 2, 3), {}
+ERROR: Ошибка solve_quadratic: TypeError - Коэффициенты должны быть числами
+Поймано исключение: Коэффициенты должны быть числами</pre>
+            </div>
+        </div>
+        
+        <div class="screenshot-info">
+            <h3>Скриншоты работы программы</h3>
+            <p>Скриншоты, демонстрирующие работу декоратора, находятся в папке Google Диска.</p>
+            <p>На скриншотах представлены:</p>
+            <ul>
+                <li>Вывод программы при успешном выполнении функций</li>
+                <li>Логирование ошибок при исключениях</li>
+                <li>Работа с различными типами обработчиков (sys.stdout, io.StringIO)</li>
+                <li>Результаты выполнения тестов</li>
+            </ul>
+        </div>
+        
+        <h2>Выводы</h2>
+        
+        <p>В ходе лабораторной работы был успешно разработан декоратор <span class="decorator-name">logger</span> с параметрами, который позволяет:</p>
+        
+        <ul>
+            <li>Логировать начало и конец выполнения функций</li>
+            <li>Логировать аргументы функций и возвращаемые значения</li>
+            <li>Обрабатывать и логировать исключения</li>
+            <li>Работать с различными типами обработчиков логов (стандартные потоки, объекты logging)</li>
+            <li>Использоваться как с параметрами, так и без них (благодаря значению по умолчанию)</li>
+        </ul>
+        
+        <p>Декоратор протестирован с помощью модуля <code>unittest</code>, все тесты проходят успешно. Реализация демонстрирует гибкость и удобство использования декораторов с параметрами в Python.</p>
+    </div>
+</body>
+</html>
