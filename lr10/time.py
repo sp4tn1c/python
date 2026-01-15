@@ -1,12 +1,22 @@
 from iteration1 import integrate
 from iteration2 import integrate_async
 from iteration3 import integrate_process
+
+try:
+    import pyximport
+    pyximport.install(language_level=3)
+    import cython_integrate
+
+except Exception as e:
+    print("Cython не загружен: {e}")
+
+
 from iteration5 import integrate_processes_mp
-import cython_integrate
 import math
 import time
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     n_iter = 10_000_000
 
     print(f"Тест: ∫cos(x)dx от 0 до π")
