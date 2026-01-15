@@ -70,12 +70,12 @@ if __name__ == "__main__":
     r5 = integrate_processes_mp(math.cos, 0.0, math.pi, n_jobs=2, n_iter=n_iter)
     t5 = time.perf_counter() - start
 
-    print(f"iteration1:                        {t1:.4f} сек | {r1:.5f}")
-    print(f"iteration2_async:                  {t2:.4f} сек | {r2:.5f}")
-    print(f"iteration3_process:                {t3:.4f} сек | {r3:.5f}")
+    print(f"iteration1:                        {t1:.4f} сек")
+    print(f"iteration2_async:                  {t2:.4f} сек")
+    print(f"iteration3_process:                {t3:.4f} сек")
     if cython_ok:
-        print(f"Cython:                            {t4:.4f} сек | {r4:.5f}")
-    print(f"iteration5_multiprocessing:        {t5:.4f} сек | {r5:.5f}")
+        print(f"Cython:                            {t4:.4f} сек")
+    print(f"iteration5_multiprocessing:        {t5:.4f} сек")
 
     for n_jobs in [2, 4, 6]:
         print(f"\n{n_jobs} процессов (мультипроцессинг):")
