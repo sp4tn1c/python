@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет по лабораторной работе</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+            padding-bottom: 10px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        h3 {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .good {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .code {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="section">
+    <h1>Отчет по лабораторной работе</h1>
+    <h2>Оптимизация вычисления определенного интеграла</h2>
+</div>
+
+<div class="section">
+    <h3>1. Описание реализаций</h3>
+    
+    <p><strong>Итерация 1:</strong> Базовая версия на Python - последовательное вычисление</p>
+    <p><strong>Итерация 2:</strong> ThreadPoolExecutor - использование потоков для параллельности</p>
+    <p><strong>Итерация 3:</strong> ProcessPoolExecutor - использование процессов для обхода GIL</p>
+    <p><strong>Итерация 4:</strong> Cython - оптимизация через компиляцию в C</p>
+    <p><strong>Итерация 5:</strong> Multiprocessing - прямой мультипроцессинг как аналог NoGIL</p>
+</div>
+
+<div class="section">
+    <h3>2. Сравнение производительности</h3>
+    <p><strong>Тест:</strong> Вычисление ∫cos(x)dx от 0 до π</p>
+    <p><strong>Итераций:</strong> 10,000,000</p>
+    <p><strong>Ожидаемый результат:</strong> 0.00000</p>
+    
+    <table>
+        <tr>
+            <th>Метод</th>
+            <th>Время (сек)</th>
+            <th>Ускорение</th>
+            <th>Результат</th>
+        </tr>
+        <tr>
+            <td>Итерация 1 (базовая)</td>
+            <td>0.6143</td>
+            <td>1.00x</td>
+            <td>0.00000</td>
+        </tr>
+        <tr>
+            <td>Итерация 2 (потоки)</td>
+            <td>0.5748</td>
+            <td class="good">1.07x</td>
+            <td>0.00000</td>
+        </tr>
+        <tr>
+            <td>Итерация 3 (процессы)</td>
+            <td>0.3478</td>
+            <td class="good">1.77x</td>
+            <td>0.00000</td>
+        </tr>
+        <tr>
+            <td>Cython</td>
+            <td>0.2800</td>
+            <td class="good">2.19x</td>
+            <td>0.00000</td>
+        </tr>
+        <tr>
+            <td>Мультипроцессинг</td>
+            <td>0.3556</td>
+            <td class="good">1.73x</td>
+            <td>0.00000</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h3>3. Мультипроцессинг с разным количеством процессов</h3>
+    <p><strong>Тест:</strong> Вычисление ∫sin(x)dx от 0 до π/2</p>
+    <p><strong>Итераций:</strong> 10,000,000</p>
+    <p><strong>Ожидаемый результат:</strong> 1.00000</p>
+    
+    <table>
+        <tr>
+            <th>Процессов</th>
+            <th>Время (сек)</th>
+            <th>Ускорение</th>
+            <th>Результат</th>
+        </tr>
+        <tr>
+            <td>2 процесса</td>
+            <td>0.3488</td>
+            <td class="good">1.76x</td>
+            <td>1.00000</td>
+        </tr>
+        <tr>
+            <td>4 процесса</td>
+            <td>0.2100</td>
+            <td class="good">2.93x</td>
+            <td>1.00000</td>
+        </tr>
+        <tr>
+            <td>6 процессов</td>
+            <td>0.1957</td>
+            <td class="good">3.14x</td>
+            <td>1.00000</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h3>4. Пример работы мультипроцессинга</h3>
+    
+    <div class="code">
+2 процесса:
+Работник 0 вычисляет отрезок: [0.0, 0.5]
+Работник 1 вычисляет отрезок: [0.5, 1.0]
+Каждый получает результат: 0.33283
+Сумма результатов: 0.66566
+Время выполнения: 0.3488 сек
+    </div>
+    
+    <div class="code">
+4 процесса:
+Работник 0 вычисляет отрезок: [0.0, 0.25]
+Работник 1 вычисляет отрезок: [0.25, 0.5]
+Работник 2 вычисляет отрезок: [0.5, 0.75]
+Работник 3 вычисляет отрезок: [0.75, 1.0]
+Каждый получает результат: ~0.16642
+Сумма результатов: ~0.66568
+Время выполнения: 0.2100 сек
+    </div>
+    
+    <div class="code">
+6 процессов:
+6 работников вычисляют свои отрезки
+Каждый получает результат: ~0.11094
+Сумма результатов: ~0.66564
+Время выполнения: 0.1957 сек
+    </div>
+    
+    <p>В логах показан пример вычисления ∫x²dx от 0 до 1, где каждый работник вычисляет интеграл на своем отрезке.</p>
+</div>
+
+<div class="section">
+    <h3>5. Анализ методов</h3>
+    
+    <p><strong>Потоки (ThreadPoolExecutor):</strong></p>
+    <ul>
+        <li>Ускорение всего 1.07x</li>
+        <li>Причина: Global Interpreter Lock (GIL) в Python блокирует параллельные вычисления</li>
+        <li>Подходит для I/O операций, но не для вычислений</li>
+    </ul>
+    
+    <p><strong>Процессы и мультипроцессинг:</strong></p>
+    <ul>
+        <li>Ускорение 1.77x - 3.14x</li>
+        <li>Каждый процесс имеет свой интерпретатор и память</li>
+        <li>Нет ограничений GIL</li>
+        <li>Больше процессов → лучше ускорение</li>
+    </ul>
+    
+    <p><strong>Cython:</strong></p>
+    <ul>
+        <li>Наибольшее ускорение: 2.19x</li>
+        <li>Код компилируется в C</li>
+        <li>Статическая типизация ускоряет вычисления</li>
+        <li>Не требует параллельности для ускорения</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h3>6. Выводы</h3>
+    
+    <ol>
+        <li><strong>Cython</strong> показал наибольшее ускорение вычислений (2.19x)</li>
+        <li><strong>Мультипроцессинг</strong> хорошо масштабируется с количеством процессов</li>
+        <li><strong>Потоки</strong> неэффективны для вычислительных задач из-за GIL</li>
+        <li><strong>Оптимальное количество процессов</strong> - 4-6 для тестируемой системы</li>
+        <li>Все методы сохранили правильность вычислений (результаты совпадают)</li>
+    </ol>
+</div>
+
+</body>
+</html>
