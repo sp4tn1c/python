@@ -9,44 +9,44 @@ import time
 if __name__ == '__main__':
     n_iter = 10_000_000
 
-    print(f"Тест: ∫sin(x)dx от 0 до π")
+    print(f"Тест: ∫cos(x)dx от 0 до π")
     print(f"Итераций: {n_iter:,}")
     print("-" * 50)
 
     # 1. Базовая
     start = time.perf_counter()
-    r1 = integrate(math.sin, 0.0, math.pi, n_iter=n_iter)
+    r1 = integrate(math.cos, 0.0, math.pi, n_iter=n_iter)
     t1 = time.perf_counter() - start
 
     # 2. Потоки
     start = time.perf_counter()
-    r2 = integrate_async(math.sin, 0.0, math.pi, n_iter=n_iter)
+    r2 = integrate_async(math.cos, 0.0, math.pi, n_iter=n_iter)
     t2 = time.perf_counter() - start
 
     # 3. Процессы
     start = time.perf_counter()
-    r3 = integrate_process(math.sin, 0.0, math.pi, n_iter=n_iter)
+    r3 = integrate_process(math.cos, 0.0, math.pi, n_iter=n_iter)
     t3 = time.perf_counter() - start
 
     # 4. Cython - пробуем разные варианты (разные виды функций)
     try:
         # Вариант 1
         start = time.perf_counter()
-        r4 = cython_integrate.integrate_python_version(math.sin, 0.0, math.pi, n_iter)
+        r4 = cython_integrate.integrate_python_version(math.cos, 0.0, math.pi, n_iter)
         t4 = time.perf_counter() - start
         cython_ok = True
     except:
         try:
             # Вариант 2
             start = time.perf_counter()
-            r4 = cython_integrate.integrate_cy(math.sin, 0.0, math.pi, n_iter)
+            r4 = cython_integrate.integrate_cy(math.cos, 0.0, math.pi, n_iter)
             t4 = time.perf_counter() - start
             cython_ok = True
         except:
             try:
                 # Вариант 3
                 start = time.perf_counter()
-                r4 = cython_integrate.integrate(math.sin, 0.0, math.pi, n_iter)
+                r4 = cython_integrate.integrate(math.cos, 0.0, math.pi, n_iter)
                 t4 = time.perf_counter() - start
                 cython_ok = True
             except Exception as e:
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     # 5. Мультипроцессинг
     start = time.perf_counter()
-    r5 = integrate_processes_mp(math.sin, 0.0, math.pi, n_jobs=2, n_iter=n_iter)
+    r5 = integrate_processes_mp(math.cos, 0.0, math.pi, n_jobs=2, n_iter=n_iter)
     t5 = time.perf_counter() - start
 
     print(f"Integrate_1:           {t1:.4f} сек | {r1:.5f}")
