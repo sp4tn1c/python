@@ -1,0 +1,15 @@
+# Виртуальное окружение
+numpy_env/
+
+# Кэш Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Графики (генерируются автоматически)
+sem2/LR2/plots/
+sem2/LR3/plots/
+
+# Системные файлы
+.DS_Store
+*.swp
